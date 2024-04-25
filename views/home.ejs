@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Home</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+    rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+.addFriend {
+ font-size: 0.8rem;
+ padding: 0.5em 0.8em;
+ border: transparent;
+ box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+ background: dodgerblue;
+
+ border-radius: 4px;
+}
+.background{
+    background: rgba(158,250,190,0.5);
+-webkit-backdrop-filter: blur(16px);
+backdrop-filter: blur(16px);
+border: 1px solid rgba(158,250,190,0.25);
+}
+.search{
+    height: 65vh;
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%,-50%);
+    border-radius: 30px;
+    z-index: 5;
+}
+</style>
+<body >
+    <!-- chatui -->
+    <div class="chatui hidden min-h-screen flex flex-col">
+        <!-- Header -->
+        <div class="header bg-gray-800 h-16 text-white p-2 flex gap-5 items-center">
+            <div class="header2 flex gap-5 items-center">
+                <i id="back" class="ri-arrow-left-fill"></i>
+                <img src="/images/def.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+            </div>
+            <div class="name ml-3">
+                <h2 class="text-lg font-semibold">John Doe</h2>
+             
+            </div>
+        </div>
+        
+        <!-- Chat area -->
+        <div class="chating flex-1 flex flex-col justify-end px-4 py-2 overflow-y-auto">
+          <!-- Sender Message -->
+        
+          <!-- Receiver Message -->
+          <div class="flex justify-start mb-2">
+            <div class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg max-w-xs">
+              Hi! How can I help you?
+            </div>
+          </div>
+        </div>
+        
+        <!-- Input area -->
+        <div class="bg-gray-100 px-4 py-2 flex items-center">
+          <input id="sendmessage" type="text" placeholder="Type your message..." class="flex-1 py-2 px-4 rounded-full border-gray-300 focus:outline-none focus:ring focus:border-blue-500">
+          <button onclick="sendMessage()" class="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white">Send</button>
+        </div>
+      </div>
+      
+<!-- search -->
+    <div class="search flex hidden bg-green-100 flex-col">
+        <!-- Navbar -->
+      
+      
+        
+        <!-- Search Input -->
+        <div class="p-4 flex gap-2 items-center">
+            <i id="close" class="ri-arrow-left-fill"></i>
+
+            <input type="text" placeholder="Search users..." class="searchinput w-full border border-gray-300 rounded-lg px-4 py-2">
+        </div>
+        
+        <!-- User List -->
+        <div class="flex-1 overflow-y-auto p-3">
+            <h2 class="text-lg font-semibold mb-4">Search Results</h2>
+            <div class="background bg-white rounded-lg shadow-md p-3">
+                <ul  class="findUser divide-y divide-gray-300">
+                   
+                    <!-- Repeat for other search results -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+ <div class="home  bg-green-600 px-2 py-2 h-screen">
+   
+   <div class="container mx-auto py-2 px-2">
+       <div class="flex justify-between items-center mb-4">
+        <div class="background bg-white rounded-lg shadow-md w-36">
+            <!-- logged in user -->
+            <ul class=" divide-y divide-gray-300">
+                <li class="ml-1 flex items-center py-1">
+                 <img src="<%=loggedInUser.profileImage%>" alt="Profile" class="w-10 h-10 rounded-full">
+ 
+                    <div class="ml-3">
+                        <h2 class="text-lg text-white font-semibold"><%=loggedInUser.username%></h2>
+                     
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+           <div class="flex items-center space-x-4">
+               
+               <button class="addFriend flex  items-center text-white font-bold">
+                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                             d="M12 5v14m8-7H4"></path>
+                   </svg>
+                   <span class="ml-1">Add Friend</span>
+               </button>
+           </div>
+       </div>
+   
+       <div class="background bg-white rounded-lg shadow-md p-4">
+           <!-- Chat list -->
+           <ul class="addChat divide-y divide-gray-300">
+            <% loggedInUser.friends.forEach(friend=>{ %>
+                
+                <li  onclick="openChat('<%= friend.profileImage %>','<%= friend.username %>','<%= friend._id %>')" id="shery_<%= friend._id %>"  class="user ml-1 flex items-center py-1">
+                    <img src="<%=friend.profileImage%>" alt="Profile" class="w-10 h-10 rounded-full">
+    
+                       <div class="ml-3">
+                           <h2 class="text-lg text-white font-semibold"><%=friend.username%></h2>
+                        
+                       </div>
+                   </li>
+
+          <%  }) %>
+
+            
+               <!-- Add more chat items as needed -->
+           </ul>
+       </div>
+   </div>
+ </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var socket = io();
+        const username = '<%=loggedInUser.username%>'
+        let oppositeUser= null;
+
+        socket.emit('join-server',username)
+        
+      
+        function clickBack(){
+     
+            document.querySelector('.addFriend').addEventListener("click",function(){
+            document.querySelector('.search').classList.remove('hidden');
+            // document.querySelector('.home').classList.add('hidden');
+        })
+
+        document.querySelector('#close').addEventListener("click",function(){
+            document.querySelector('.search').classList.add('hidden');
+            document.querySelector('.home').classList.remove('hidden');
+
+        })
+        
+        document.querySelector('#back').addEventListener("click",function(){
+            document.querySelector('.chatui').classList.add('hidden');
+            document.querySelector('.home').classList.remove('hidden');
+
+        })
+    }
+  
+    clickBack();
+
+  document.querySelector('.searchinput')
+      .addEventListener('input',async(event)=>{
+        const data = document.querySelector('.searchinput').value
+
+      if (data == "") {
+         return
+        }
+
+
+       const response = await axios.post('/searchUser', {
+     //yaha jo bhi bhejoge wo body mein chala jayega
+      data: data
+      }) 
+      document.querySelector('.findUser').innerHTML ="";
+      response.data.forEach(searchUser => {
+       appendSearchUser(searchUser.username,searchUser.profileImage,searchUser._id)
+      });
+    })
+      
+      
+    function appendSearchUser(username,profileImage,id){
+        const template =`<li id="${id}"  class="flex items-center justify-between py-2 cursor-pointer ">
+                        <div class="flex items-center">
+                <img src="${profileImage}" alt="Profile" class="w-10 h-10 rounded-full">
+                             
+ 
+                            <div class="ml-3">
+                                <h2 class="text-lg text-white font-semibold">${username}</h2>
+                            </div>
+                        </div>
+                        <button onclick="addFriend(event,'${id}','${username}','${profileImage}')" class="bg-blue-500 text-white px-3 py-1 rounded-lg">Add Friend</button>
+                    </li>`
+
+                    document.querySelector('.findUser').innerHTML += template;                 
+
+    }
+ 
+    function appendChat(profileImage,username,id){
+        if (document.querySelector(`.addChat #shery_${id}`)) {
+        return
+      }
+        const template = `<li id="shery_${id}" class="user ml-1 flex items-center py-1">
+                 <img src="${profileImage}" alt="Profile" class="w-10 h-10 rounded-full">
+ 
+                    <div class="ml-3">
+                        <h2 class="text-lg text-white font-semibold">${username}</h2>
+                     
+                    </div>
+                </li>`
+
+                document.querySelector('.addChat').innerHTML += template
+    }
+  
+    async function addFriend(event, id, profileImage, username) {
+      try {
+        const response = await axios.post('/addFriend', {
+          friendId: id
+        })
+
+        console.log("this is working")
+
+      } catch (err) {
+        console.log("this is error")
+      }
+
+      appendChat(username,profileImage,id)
+      const userchat = document.querySelectorAll('.user')
+
+//       userchat.forEach(element => {
+//         element.addEventListener("click",function(){
+//             document.querySelector('.chatui').classList.remove('hidden');
+//             document.querySelector('.home').classList.add('hidden');
+
+//         })
+// });
+     
+   // console.log(response)
+      }
+
+    function openChat(profileImage,username,id){
+
+        document.querySelector('.chatui').classList.remove('hidden');
+        document.querySelector('.home').classList.add('hidden');
+        document.querySelector(' .header .header2 img').setAttribute('src',profileImage)
+        document.querySelector('.header .name h2').innerHTML = username;
+        oppositeUser = username
+
+    }
+  
+    function appendOutgoingMessage(message){
+        const template =`<div class="flex justify-end mb-2">
+            <div class="bg-blue-600 text-white py-2 px-4 rounded-lg max-w-xs">
+            ${message}
+            </div>
+          </div>`
+          document.querySelector('.chating').innerHTML += template
+        
+    }
+ 
+    function sendMessage(){
+        const message = document.querySelector('#sendmessage').value
+        appendOutgoingMessage(message)
+
+        document.querySelector('#sendmessage').value = ''
+
+        const messageObject ={
+            message, 
+            receiver:oppositeUser ,
+        }
+       
+        socket.emit('send-private-message',messageObject)
+
+    }
+
+    
+      
+    socket.on('receive-private-message', messageObject => {
+    
+        console.log(messageObject)
+
+    })
+  
+ </script>
+
+</body>
+</html>
+
+ <!-- <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+    </script> -->
+

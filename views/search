@@ -1,0 +1,28 @@
+<div class="flex flex-col h-screen">
+    <!-- Navbar -->
+    <div class="bg-gray-800 text-white p-4">
+        <h1 class="text-xl font-bold">Search Users</h1>
+    </div>
+    
+    <!-- Search Input -->
+    <div class="p-4">
+        <input type="text" placeholder="Search users..." class="w-full border border-gray-300 rounded-lg px-4 py-2">
+    </div>
+    
+    <!-- User List -->
+    <div class="flex-1 overflow-y-auto">
+        <div class="p-4">
+            <h2 class="text-lg font-semibold mb-4">Search Results</h2>
+            <ul>
+                <li class="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-200">
+                    <div class="flex items-center">
+                        <img src="user-avatar.jpg" alt="User Avatar" class="w-10 h-10 rounded-full mr-2">
+                        <span>User 1</span>
+                    </div>
+                    <button class="bg-blue-500 text-white px-3 py-1 rounded-lg">Chat</button>
+                </li>
+                <!-- Repeat for other search results -->
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="min-h-screen flex flex-col">
+  <!-- Header -->
+  <div class="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-lg font-semibold">Chat App</h1>
+    <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white">Sign Out</button>
+  </div>
+  
+  <!-- Chat area -->
+  <div class="flex-1 flex flex-col justify-end px-4 py-2 overflow-y-auto">
+    <!-- Sender Message -->
+    <div class="flex justify-end mb-2">
+      <div class="bg-blue-600 text-white py-2 px-4 rounded-lg max-w-xs">
+        Hey there!
+      </div>
+    </div>
+    <!-- Receiver Message -->
+    <div class="flex justify-start mb-2">
+      <div class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg max-w-xs">
+        Hi! How can I help you?
+      </div>
+    </div>
+  </div>
+  
+  <!-- Input area -->
+  <div class="bg-gray-100 px-4 py-2 flex items-center">
+    <input type="text" placeholder="Type your message..." class="flex-1 py-2 px-4 rounded-full border-gray-300 focus:outline-none focus:ring focus:border-blue-500">
+    <button class="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white">Send</button>
+  </div>
+</div>
